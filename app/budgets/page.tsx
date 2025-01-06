@@ -14,10 +14,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import CreateGoalDialog from "@/components/create-goal-dialog";
-import { columns } from "./columns"
 import { DataTable } from "@/components/data-table"
-import { getGoals } from "./actions";
   
 
 export default async function Page() {
@@ -26,7 +23,6 @@ export default async function Page() {
     if (!cookie) throw new Error('Not logged in');
     const { model } = JSON.parse(cookie.value);
 
-    const goals = await getGoals();
 
     return (
         <SidebarProvider>
@@ -45,7 +41,7 @@ export default async function Page() {
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="#">
-                  goals
+                  budgets
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
@@ -54,14 +50,12 @@ export default async function Page() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <CreateGoalDialog />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             
           </div>
           <div className="flex-1 ">
-            <DataTable columns={columns} data={goals}  />
           </div>
         </div>
       </SidebarInset>

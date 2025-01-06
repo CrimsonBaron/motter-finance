@@ -4,8 +4,10 @@ export type Goal = {
     name: string;
     description: string;
     category: string;
-    goalAmmount: number;
-    currentAmmount: number;
-    investmentAmmount: number;
-    completionDate: Date;
+    targetAmount: number;
+    currentAmount: number;
+    investmentAmount: number;
+    linkedAccountId: string[];
+    targetDate: Date;
+    progress: number;
 }

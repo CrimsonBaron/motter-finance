@@ -1,14 +1,19 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Goal } from "@/lib/types/goal-types"
-
-
+import { ColumnDef } from "@tanstack/react-table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Goal } from "@/lib/types/goal-types";
 
 export const columns: ColumnDef<Goal>[] = [
   {
@@ -44,11 +49,9 @@ export const columns: ColumnDef<Goal>[] = [
           Name
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("name")}</div>
-    ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "category",
@@ -61,123 +64,102 @@ export const columns: ColumnDef<Goal>[] = [
           Category
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-        const category = row.getValue("category")
-        const className = `${
-          category == "Major Purchases" ? "bg-blue-100 text-blue-800" : 
-          category == "Emergency Fund" ? "bg-red-100 text-red-800" :
-          category == "Travel and Leisure" ? "bg-green-100 text-green-800" :
-          category == "Education" ? "bg-yellow-100 text-yellow-800" :
-          category == "Investments" ? "bg-purple-100 text-purple-800" :
-          category == "Life Event" ? "bg-pink-100 text-pink-800" : ""
-        }`
-        return(
-            <Badge className={className}>
-              {row.getValue("category")}
-            </Badge>
-          )
+      const category = row.getValue("category");
+      const className = `${
+        category === "Major Purchases"
+          ? "bg-blue-100 text-blue-800"
+          : category === "Emergency Fund"
+          ? "bg-red-100 text-red-800"
+          : category === "Travel and Leisure"
+          ? "bg-green-100 text-green-800"
+          : category === "Education"
+          ? "bg-yellow-100 text-yellow-800"
+          : category === "Investments"
+          ? "bg-purple-100 text-purple-800"
+          : category === "Life Event"
+          ? "bg-pink-100 text-pink-800"
+          : ""
+      }`;
+      return (
+        <Badge className={className}>{row.getValue("category")}</Badge>
+      );
     },
   },
   {
-    accessorKey: "goalAmmount",
+    accessorKey: "targetAmount",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Goal Ammount
+          Target Amount
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("goalAmmount"))
-      const currency = "CZK"
-      const locale = "cs-CZ"
- 
+      const amount = row.getValue("targetAmount");
+      const currency = "CZK";
+      const locale = "cs-CZ";
+
       const formatted = new Intl.NumberFormat(locale, {
         style: "currency",
         currency: currency,
-      }).format(amount)
-      return (
-        <div>{formatted}</div>
-      )
+      }).format(amount as number);
+      return <div>{formatted}</div>;
     },
   },
   {
-    accessorKey: "currentAmmount",
+    accessorKey: "currentAmount",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Current Ammount
+          Current Amount
           <ArrowUpDown />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("currentAmmount"))
-      const currency = "CZK"
-      const locale = "cs-CZ"
- 
+      const amount = row.getValue("currentAmount");
+      const currency = "CZK";
+      const locale = "cs-CZ";
+
       const formatted = new Intl.NumberFormat(locale, {
         style: "currency",
         currency: currency,
-      }).format(amount)
-      return (
-        <div>{formatted}</div>
-      )
+      }).format(amount as number);
+      return <div>{formatted}</div>;
     },
   },
   {
-    accessorKey: "investmentAmmount",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Investment Ammount
-          <ArrowUpDown />
-        </Button>
-      )
-    },
+    accessorKey: "targetDate",
+    header: "Target Date",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("investmentAmmount"))
-      const currency = "CZK"
-      const locale = "cs-CZ"
- 
-      const formatted = new Intl.NumberFormat(locale, {
-        style: "currency",
-        currency: currency,
-      }).format(amount)
-      return (
-        <div>{formatted}</div>
-      )
-    },
-  },
-  {
-    accessorKey: "completionDate",
-    header: "Completion Date",
-    cell: ({ row }) => {
-      const date = new Date(row.getValue("completionDate"))
-      const locale = "cs-CZ"
-      const formatted = new Intl.DateTimeFormat(locale).format(date)
-      return <div>{formatted}</div>
+      const dateValue = row.getValue("targetDate");
+
+      if (dateValue instanceof Date && !isNaN(dateValue.getTime())) {
+        const locale = "cs-CZ";
+        const formatted = new Intl.DateTimeFormat(locale).format(dateValue);
+        return <div>{formatted}</div>;
+      } else {
+        return <div>Invalid Date</div>;
+      }
     },
     enableHiding: true,
-  },  
+  },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
- 
+      const payment = row.original;
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -202,7 +184,7 @@ export const columns: ColumnDef<Goal>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];

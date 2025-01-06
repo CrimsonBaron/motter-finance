@@ -23,6 +23,7 @@ import { useState } from "react";
 import { createAccount } from "@/app/accounts/actions";
 import { Plus } from "lucide-react";
 import { useSidebar } from "./ui/sidebar";
+import { useRouter } from "next/navigation";
 
 
 
@@ -36,6 +37,7 @@ export default function CreateAccountDialog() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const {isMobile} = useSidebar();
+    const router = useRouter();
 
     const closeDialog = () => setIsOpen(false);
 
@@ -56,6 +58,7 @@ export default function CreateAccountDialog() {
         try {
             await createAccount(newAccout);
             closeDialog();
+            router.refresh();
         }catch(e) {
             console.error(e);
         }
