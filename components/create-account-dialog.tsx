@@ -42,12 +42,12 @@ export default function CreateAccountDialog() {
     const closeDialog = () => setIsOpen(false);
 
     const handleSubmit = async () => {
-        if (!accountName || !accountDescription || !accountType || !currencyType || !initialBalance) {
+        if (!accountName  || !accountType || !currencyType || !initialBalance) {
             console.error("missing required fields");
             return;
         }
 
-        const newAccout = {
+        const newAccount = {
             name: accountName,
             description: accountDescription,
             type: accountType,
@@ -56,8 +56,15 @@ export default function CreateAccountDialog() {
         }
 
         try {
-            await createAccount(newAccout);
+            await createAccount(newAccount);
             closeDialog();
+
+            setAccountName("");
+            setAccountDescription("");
+            setAccountType("checking");
+            setCurrencyType("czk");
+            setInitialBalance(0);
+
             router.refresh();
         }catch(e) {
             console.error(e);

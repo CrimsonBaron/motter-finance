@@ -10,5 +10,4 @@ export type Budget = {
     budgetAmount: number;
     currentAmount: number;
     spentPercentage: number;
-
 }

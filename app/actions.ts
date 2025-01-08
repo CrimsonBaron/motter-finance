@@ -31,6 +31,6 @@ export async function login(formData: FormData) {
 }
 
 export async function logout() {
-  await cookies().delete('pb_auth');
-  redirect('/');
+ await cookies().delete('pb_auth');
+ await redirect('/');
 }

@@ -14,7 +14,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { DataTable } from "@/components/data-table"
+import CreateBudgetDialog from "@/components/create-budget-dialog";
   
 
 export default async function Page() {
@@ -50,12 +50,14 @@ export default async function Page() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
+          <CreateBudgetDialog/>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             
           </div>
           <div className="flex-1 ">
+
           </div>
         </div>
       </SidebarInset>
