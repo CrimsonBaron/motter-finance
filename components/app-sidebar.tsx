@@ -36,13 +36,13 @@ const data = {
     },
     {
       title: "Transactions",
-      url: "/transactions",
+      url: "/transactions/all",
       icon: ArrowRightLeft,
       isActive: true,
       items: [
         {
           title: "All",
-          url: "/transactions",
+          url: "/transactions/all",
         },
         {
           title: "Income",

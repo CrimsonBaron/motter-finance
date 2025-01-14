@@ -1,5 +1,5 @@
 
-export type Budget = {
+export type DtoBudgetIn = {
     id: string;
     name: string;
     description: string;
@@ -10,4 +10,14 @@ export type Budget = {
     budgetAmount: number;
     currentAmount: number;
     spentPercentage: number;
+}
+
+export type DtoBudgetOut = {
+    name: string
+    description: string,
+    category: "Monthly Expenses"| "Project Budget"| "Travel Budget"| "Holiday Budget"| "Special Occasion",
+    period: "monthly" | "yearly" | "daily",
+    budgetAmount: number,
+    startDay: Date,
+    endDay: Date,
 }

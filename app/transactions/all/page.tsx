@@ -14,10 +14,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import CreateBudgetDialog from "@/components/create-budget-dialog";
-import { DataTable } from "@/components/data-table";
-import { columns } from "./columns";
-import { getBudgets } from "./actions";
+import CreateTransactionDialog from "@/components/create-transaction-dialog";
   
 
 export default async function Page() {
@@ -26,8 +23,6 @@ export default async function Page() {
     if (!cookie) throw new Error('Not logged in');
     const { model } = JSON.parse(cookie.value);
 
-    const budgets = await getBudgets();
-    console.log(budgets);
 
 
     return (
@@ -47,24 +42,22 @@ export default async function Page() {
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
                 <BreadcrumbLink href="#">
-                  budgets
+                  transactions
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>overview</BreadcrumbPage>
+                <BreadcrumbPage>all</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <CreateBudgetDialog/>
+            <div className="flex-1 flex justify-end mr-5">
+                
+            </div>
+            <CreateTransactionDialog />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             
-          </div>
-          <div className="flex-1 ">
-            <DataTable columns={columns} data={budgets!} />
-          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>

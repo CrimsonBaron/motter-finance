@@ -27,6 +27,7 @@ import { createBudget } from "@/app/budgets/actions";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { DtoBudgetOut } from "@/lib/types/budget-type";
 
 
 
@@ -34,10 +35,10 @@ import { Calendar } from "@/components/ui/calendar";
 export default function CreateBudgetDialog() {
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [category, setCategory] = useState<string>("Monthly Expenses");
-    const [period, setPeriod] = useState<string>("monthly");
-    const [startDate, setStartDate] = useState<Date | undefined>(new Date());
-    const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+    const [category, setCategory] = useState<"Monthly Expenses"| "Project Budget"| "Travel Budget"| "Holiday Budget"| "Special Occasion">("Monthly Expenses");
+    const [period, setPeriod] = useState<"monthly" | "yearly" | "daily">("monthly");
+    const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+    const [endDate, setEndDate] = useState<Date | undefined>(undefined);
     const [amount, setAmount] = useState<number>(0);
 
   
@@ -54,13 +55,14 @@ export default function CreateBudgetDialog() {
             return;
         }
 
-        const budget = {
+        const budget: DtoBudgetOut = {
             name: name,
             description: description,
             category: category,
             period: period,
-            startDay: startDate.toISOString(),
-            endDay: endDate.toISOString(),
+            budgetAmount: amount,
+            startDay: startDate,
+            endDay: endDate,
         }
 
         try {
@@ -71,8 +73,8 @@ export default function CreateBudgetDialog() {
             setDescription("");
             setCategory("Monthly Expenses");
             setPeriod("monthly");
-            setStartDate(new Date());
-            setEndDate(new Date());
+            setStartDate(undefined);
+            setEndDate(undefined);
             setAmount(0);
 
             router.refresh();
@@ -108,7 +110,7 @@ export default function CreateBudgetDialog() {
                   />
                   <Label htmlFor="text">Description</Label>
                   <Textarea 
-                    placeholder="money money this account holds money"
+                    placeholder="i want a new ..... so i need to save"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                   />
@@ -119,7 +121,7 @@ export default function CreateBudgetDialog() {
                         <Select 
                             defaultValue={category}
                             value={category}
-                            onValueChange={(e) => setCategory(e)}
+                            onValueChange={(e) => setCategory(e as "Monthly Expenses" | "Project Budget" | "Travel Budget" | "Holiday Budget" | "Special Occasion")}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="type" />
@@ -138,7 +140,7 @@ export default function CreateBudgetDialog() {
                         <Label htmlFor="text">Period</Label>
                         <Select 
                             defaultValue={period}
-                            onValueChange={(e) => setPeriod(e)}
+                            onValueChange={(e) => setPeriod(e as "monthly" | "yearly" | "daily")}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="type" />

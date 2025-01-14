@@ -46,6 +46,7 @@ export async function getGoals(): Promise<Goal[]> {
         category: goal.category,
         targetAmount: goal.targetAmount, 
         currentAmount: goal.currentAmount, 
+        investmentAmount: goal.investmentAmount || 0,
         linkedAccountId: goal.linkedAccounts, 
         targetDate: new Date(goal.targetDate), 
         progress: (goal.currentAmount / goal.targetAmount) * 100 || 0, 
