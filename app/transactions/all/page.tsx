@@ -51,10 +51,8 @@ export default async function Page() {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-            <div className="flex-1 flex justify-end mr-5">
-                
-            </div>
-            <CreateTransactionDialog />
+          <CreateTransactionDialog />
+          
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
             
