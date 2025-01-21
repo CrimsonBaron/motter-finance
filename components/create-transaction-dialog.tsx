@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, ArrowLeftRight, ArrowRightLeft, BadgeCent, Goal as GoalIcon, Plus } from "lucide-react"
+import { ArrowDownUp, ArrowLeft, ArrowLeftRight, ArrowRightLeft, BadgeCent, Goal as GoalIcon, Plus } from "lucide-react"
 import { Button } from "./ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog"
 import { Label } from "./ui/label"
@@ -15,7 +15,7 @@ export default function CreateTransactionDialog() {
     const [isOpened, setIsOpened] = useState<boolean>(false);
     const [step, setStep] = useState<number>(1);
 
-    const { accounts, goals, budgets, handleSubmit } = useTransaction(step, setIsOpened);
+    const { accounts, goals, budgets, handleSubmit } = useTransaction(step, setIsOpened, setStep);
 
     return (
         <Dialog onOpenChange={setIsOpened} open={isOpened}>
@@ -46,6 +46,18 @@ export default function CreateTransactionDialog() {
                                 <Label className="mb-1">Outgoing transaction</Label>
                                 <span className="text-sm text-slate-900/50 leading-3 ">
                                     transfer money from your account to another account not recorded in this app
+                                </span>
+                            </div>
+                        </div>
+                        <div 
+                            className="flex items-center space-x-4 rounded-md border-2 p-4"
+                            onClick={() => setStep(6)}
+                        >
+                            <ArrowDownUp />
+                            <div className="flex flex-col">
+                                <Label className="mb-1">Incoming transaction</Label>
+                                <span className="text-sm text-slate-900/50 leading-3 ">
+                                    log your incoming transactions
                                 </span>
                             </div>
                         </div>
@@ -209,6 +221,34 @@ export default function CreateTransactionDialog() {
                             <Label htmlFor="notes">Notes</Label>
                             <Input type="text" placeholder="money money this account holds money" name="notes" />
                             <Button type="submit">Create Transaction</Button>
+                        </div>
+                    </form>
+                )}
+
+                {/* Step 2: Outgoing Transaction Form */}
+                {step === 6 && (
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex flex-col gap-4">
+                            <Label htmlFor="from">From</Label> 
+                            <Input 
+                                type="text" 
+                                placeholder="account123"
+                                name="from"
+                            />
+                            <Label htmlFor="amount">Amount</Label>
+                            <Input 
+                                type="number" 
+                                placeholder="1000"
+                                name="amount"
+                            />
+                            <Separator />
+                            <Label htmlFor="notes">Notes</Label>
+                            <Input 
+                                type="text" 
+                                placeholder="money money this account holds money"
+                                name="notes"
+                            />
+                            <Button type="submit">Create Transaction</Button> 
                         </div>
                     </form>
                 )}

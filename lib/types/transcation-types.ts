@@ -2,6 +2,7 @@ export type DtoTransactionIn = {
     id: string,
     account: string,
     amount: number,
+    isIncoming: boolean,
     isOutgoing: boolean,
     description: string,
     category: string,
@@ -15,6 +16,7 @@ export type DtoTransactionIn = {
 export type DtoTransactionOut = {
     account: string,
     amount: number,
+    isIncoming: boolean,
     isOutgoing: boolean,
     description: string,
     category: string,

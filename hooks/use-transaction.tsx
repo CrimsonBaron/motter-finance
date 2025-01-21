@@ -10,7 +10,7 @@ import { Goal } from "@/lib/types/goal-types";
 import { DtoTransactionOut } from "@/lib/types/transcation-types";
 import { useEffect, useState } from "react";
 
-export function useTransaction(step: number, setIsOpened: (value: boolean) => void) {
+export function useTransaction(step: number, setIsOpened: (value: boolean) => void, setStep: (value: number) => void) {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [goals, setGoals] = useState<Goal[]>([]);
     const [budgets, setBudgets] = useState<DtoBudgetIn[]>([]);
@@ -28,18 +28,20 @@ export function useTransaction(step: number, setIsOpened: (value: boolean) => vo
                     const newTransaction: DtoTransactionOut = {
                         account: accounts[0].id, // You might need to get the default account ID here
                         amount: amount,
-                        isOutgoing: true, 
-                        description: `Transfer to ${recipient}`, 
+                        isOutgoing: true,
+                        description: `Transfer to ${recipient}`,
                         category: 'Tech', // Or another suitable category
-                        budget: ``, 
-                        goal: '', 
-                        inAccount: '', 
+                        budget: ``,
+                        goal: '',
+                        inAccount: '',
                         notes: notes,
+                        isIncoming: false
                     };
 
                     await createTransaction(newTransaction); 
                     console.log('Outgoing transaction created:', newTransaction);
                     setIsOpened(false); 
+                    setStep(1);
                 } catch (error) {
                     console.error('Error creating outgoing transaction:', error);
                 }
@@ -51,13 +53,14 @@ export function useTransaction(step: number, setIsOpened: (value: boolean) => vo
                     const newTransaction: DtoTransactionOut = {
                         account: '', // Get the source account ID
                         amount: amount,
-                        isOutgoing: true, 
-                        description: `Transfer to ${recipientAccount}`, 
-                        category: 'Transfer', 
-                        budget: '', 
-                        goal: '', 
-                        inAccount: recipientAccount, 
+                        isOutgoing: false,
+                        description: `Transfer to ${recipientAccount}`,
+                        category: 'Transfer',
+                        budget: '',
+                        goal: '',
+                        inAccount: recipientAccount,
                         notes: notes,
+                        isIncoming: false
                     };
 
                     await createTransaction(newTransaction);
@@ -74,18 +77,20 @@ export function useTransaction(step: number, setIsOpened: (value: boolean) => vo
                     const newTransaction: DtoTransactionOut = {
                         account: '', // Get the source account ID
                         amount: amount,
-                        isOutgoing: true, 
-                        description: `Contribution to goal ${goal}`, 
-                        category: 'Goal', 
-                        budget: '', 
-                        goal: goal, 
-                        inAccount: '', 
+                        isOutgoing: false,
+                        description: `Contribution to goal ${goal}`,
+                        category: 'Goal',
+                        budget: '',
+                        goal: goal,
+                        inAccount: '',
                         notes: notes,
+                        isIncoming: false
                     };
 
                     await createTransaction(newTransaction);
                     console.log('Goal transaction created:', newTransaction);
                     setIsOpened(false); 
+                    setStep(1);
                 } catch (error) {
                     console.error('Error creating goal transaction:', error);
                 }
@@ -97,18 +102,46 @@ export function useTransaction(step: number, setIsOpened: (value: boolean) => vo
                     const newTransaction: DtoTransactionOut = {
                         account: '', // Get the source account ID
                         amount: amount,
-                        isOutgoing: true, 
+                        isOutgoing: false,
                         description: `Expense from budget ${budget}`,
-                        category: 'Budget', 
+                        category: 'Budget',
                         budget: budget,
                         goal: '',
-                        inAccount: '', 
+                        inAccount: '',
                         notes: notes,
+                        isIncoming: false
                     };
 
                     await createTransaction(newTransaction); 
                     console.log('Budget transaction created:', newTransaction);
-                    setIsOpened(false); 
+                    setIsOpened(false);
+                    setStep(1);
+                    
+                } catch (error) {
+                    console.error('Error creating budget transaction:', error);
+                }
+                break;
+                case 6: // incoming transaction
+                try {
+                    const from = formData.get('from') as string;
+                    const newTransaction: DtoTransactionOut = {
+                        account: '', // Get the source account ID
+                        amount: amount,
+                        isOutgoing: false,
+                        description: `Income from ${from}`,
+                        category: 'Budget',
+                        budget: '',
+                        goal: '',
+                        inAccount: '',
+                        notes: notes,
+                        isIncoming: true
+                    };
+
+                    await createTransaction(newTransaction); 
+                    console.log('Budget transaction created:', newTransaction);
+                    setIsOpened(false);
+                    setStep(1);
+                    
                 } catch (error) {
                     console.error('Error creating budget transaction:', error);
                 }

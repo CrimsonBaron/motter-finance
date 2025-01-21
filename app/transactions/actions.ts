@@ -45,6 +45,7 @@ export async function getTransactions(): Promise<DtoTransactionIn[]> {
                 inAccount: transaction.inAccount,
                 notes: transaction.notes,
                 date: new Date(transaction.date),
+                isIncoming: transaction.isIncoming,
             };
             return dtoTransaction;
         });
@@ -76,6 +77,13 @@ async function updateProperties(transaction: DtoTransactionOut) {
         if (transaction.isOutgoing) {
             const account = await pb.collection('accounts').getOne(transaction.account);
             account.balance -= transaction.amount;
+            await pb.collection('accounts').update(account.id, account);
+            return;
+        }
+
+        if (transaction.isIncoming) {
+            const account = await pb.collection('accounts').getOne(transaction.account);
+            account.balance += transaction.amount;
             await pb.collection('accounts').update(account.id, account);
             return;
         }
