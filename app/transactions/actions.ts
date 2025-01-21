@@ -6,7 +6,7 @@ import Pocketbase from "pocketbase";
 
 
 export async function createTransaction(transaction: DtoTransactionOut) {
-    const pb = new Pocketbase();
+    const pb = new Pocketbase(process.env.POCKETBASE_URL);
     pb.authStore.loadFromCookie(cookies().toString(), "pb_auth");
 
     try {
@@ -14,9 +14,8 @@ export async function createTransaction(transaction: DtoTransactionOut) {
             ...transaction,
             user: pb.authStore.record!.id,
         }
-
+        await updateProperties(transaction)
         const newTransaction:DtoTransactionIn = await pb.collection("transactions").create(o);
-        await updateAttributesByTransaction(newTransaction);
         return newTransaction;
 
 
@@ -27,43 +26,8 @@ export async function createTransaction(transaction: DtoTransactionOut) {
 
 }
 
-export async function updateAttributesByTransaction(transaction:DtoTransactionIn) {
-    const pb = new Pocketbase();
-    pb.authStore.loadFromCookie(cookies().toString(), "pb_auth");
-
-    try {
-       if(transaction.isOutgoing) {
-            const account = await pb.collection("accounts").getOne(transaction.account);
-            account.currentAmount -= transaction.amount;
-            await pb.collection("accounts").update(account.id, account);
-       }
-
-       if(transaction.budget) {
-            const budget = await pb.collection("budgets").getOne(transaction.budget);
-            budget.currentAmount += transaction.amount;
-            await pb.collection("budgets").update(budget.id, budget);
-       }
-
-       if(transaction.goal) {
-            const goal = await pb.collection("goals").getOne(transaction.goal);
-            goal.currentAmount += transaction.amount;
-            await pb.collection("goals").update(goal.id, goal);
-       }
-
-       if(transaction.inAccount) {
-            const inAccount = await pb.collection("accounts").getOne(transaction.inAccount);
-            inAccount.currentAmount += transaction.amount;
-            await pb.collection("accounts").update(inAccount.id, inAccount);
-       }
-
-    } catch (e) {
-        console.error(e);
-        return;
-    }
-}
-
 export async function getTransactions(): Promise<DtoTransactionIn[]> {
-    const pb = new Pocketbase();
+    const pb = new Pocketbase(process.env.POCKETBASE_URL);
     pb.authStore.loadFromCookie(cookies().toString(), "pb_auth");
 
     try {
@@ -88,4 +52,37 @@ export async function getTransactions(): Promise<DtoTransactionIn[]> {
         console.error(error);
         return [];
     }
+}  
+
+async function updateProperties(transaction: DtoTransactionOut) {
+    const pb = new Pocketbase(process.env.POCKETBASE_URL);
+    pb.authStore.loadFromCookie(cookies().toString(), "pb_auth");
+
+    try {
+        if (transaction.goal) {
+            const goal = await pb.collection('goals').getOne(transaction.goal);
+            goal.amount += transaction.amount;
+            await pb.collection('goals').update(goal.id, goal);
+            return
+        }
+
+        if (transaction.budget) {
+            const budget = await pb.collection('budgets').getOne(transaction.budget);
+            budget.currentAmount += transaction.amount;
+            await pb.collection('budgets').update(budget.id, budget);
+            return;
+        }
+
+        if (transaction.isOutgoing) {
+            const account = await pb.collection('accounts').getOne(transaction.account);
+            account.balance -= transaction.amount;
+            await pb.collection('accounts').update(account.id, account);
+            return;
+        }
+
+        
+    } catch (error) {
+        console.error(error);
+    }
 }
+

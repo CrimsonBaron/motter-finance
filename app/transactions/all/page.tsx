@@ -24,7 +24,6 @@ export default async function Page() {
     const { model } = JSON.parse(cookie.value);
 
 
-
     return (
         <SidebarProvider>
       <AppSidebar
