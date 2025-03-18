@@ -160,21 +160,3 @@ A personal finance tracker built with Next.js and PocketBase.
         "typescript": "^5"
         ```
 
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to Motter Finance, please follow these steps:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Implement your changes.
-4.  Test thoroughly.
-5.  Submit a pull request.
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## Acknowledgements
-
-* Thanks to [Vercel](https://vercel.com/) for providing the platform for hosting.
-* Thanks to the open-source community for the libraries and tools used in this project.
